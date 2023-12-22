@@ -5,14 +5,13 @@ import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
 const input = document.querySelector('#datetime-picker');
-const button = document.querySelector('button');
-button.disabled = true;
+const buttonStart = document.querySelector('[data-start]');
+buttonStart.disabled = true;
 
-// const startBtn = document.querySelector('[data-start]');
-// const daysTimer = document.querySelector('[data-days]');
-// const hoursTimer = document.querySelector('[data-hours]');
-// const minutesTimer = document.querySelector('[data-minutes]');
-// const secondsTimer = document.querySelector('[data-seconds]');
+const daysTimer = document.querySelector('[data-days]');
+const hoursTimer = document.querySelector('[data-hours]');
+const minutesTimer = document.querySelector('[data-minutes]');
+const secondsTimer = document.querySelector('[data-seconds]');
 
 // оголоси поза межами методу let змінну userSelectedDate
 let userSelectedDate = '';
@@ -23,33 +22,23 @@ const options = {
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
-  //onClose() викликається щоразу під час закриття елемента інтерфейсу flatpickr.
+
   onClose(selectedDates) {
     // перевірка дати на майбутність
     if (selectedDates[0] < new Date()) {
-      // button.disabled = true;
-      // window.alert('Please choose a date in the future');
-
-      // iziToast.show({
-      //   message: 'Please choose a date in the future',
-      //   messageColor: '#FAFAFB',
-      //   messageSize: '16px',
-      //   messageLineHeight: '1.5',
-      //   backgroundColor: '#EF4040',
-      //   position: 'topRight',
-      //   closeOnEscape: true,
-      //   close: true,
-      // });
-
       iziToast.error({
         title: 'Error',
         message: 'Please choose a date in the future',
+        messageColor: '#FAFAFB',
+        messageSize: '16px',
+        messageLineHeight: '1.5',
+        backgroundColor: '#EF4040',
         position: 'topRight',
         closeOnEscape: true,
         timeout: 5000,
       });
     } else {
-      button.disabled = false;
+      buttonStart.disabled = false;
       userSelectedDate = selectedDates[0];
     }
   },
@@ -65,11 +54,13 @@ input.addEventListener('focus', () => {
 });
 
 // Start the countdown
-button.addEventListener('click', () => {
+buttonStart.addEventListener('click', () => {
+  buttonStart.disabled = true;
+
   const currentTime = new Date().getTime();
   const selectedTime = userSelectedDate.getTime();
   const countdownInterval = selectedTime - currentTime;
-  // convertMs(countdownInterval).addLeadingZero();
+
   const time = convertMs(countdownInterval);
 
   const formattedTime = {
@@ -79,7 +70,7 @@ button.addEventListener('click', () => {
     seconds: addLeadingZero(time.seconds),
   };
 
-  console.log(formattedTime); // { days: '00', hours: '00', minutes: '00', seconds: '02' }
+  console.log(formattedTime); // {days: 00, hours: 00, minutes: 00, seconds: 00}
   // Очищення поля вводу
   input.value = '';
 });
@@ -110,14 +101,3 @@ console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20
 function addLeadingZero(value) {
   return String(value).padStart(2, '0');
 }
-
-// iziToast.show({
-//   message: 'Please choose a date in the future',
-//   messageColor: '#FAFAFB',
-//   messageSize: '16px',
-//   messageLineHeight: '1.5',
-//   backgroundColor: '#EF4040',
-//   position: 'topRight',
-//   closeOnEscape: true,
-//   close: true,
-// });
