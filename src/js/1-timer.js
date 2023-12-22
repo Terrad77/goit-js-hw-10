@@ -13,7 +13,7 @@ const hoursTimer = document.querySelector('[data-hours]');
 const minutesTimer = document.querySelector('[data-minutes]');
 const secondsTimer = document.querySelector('[data-seconds]');
 
-// оголоси поза межами методу let змінну userSelectedDate
+// оголоси поза межами методу onClose() let змінну userSelectedDate
 let userSelectedDate = '';
 
 //об'єкт параметрів бібліотеки flatpickr
@@ -53,27 +53,41 @@ input.addEventListener('focus', () => {
   datePicker.config.defaultDate = new Date();
 });
 
+let intervalId;
+
 // Start the countdown
 buttonStart.addEventListener('click', () => {
   buttonStart.disabled = true;
 
   const currentTime = new Date().getTime();
   const selectedTime = userSelectedDate.getTime();
-  const countdownInterval = selectedTime - currentTime;
+  let countdownInterval = selectedTime - currentTime;
 
+  //перша ініціалізація відображення таймера
   const time = convertMs(countdownInterval);
+  updateTimerDisplay(time);
 
-  const formattedTime = {
-    days: addLeadingZero(time.days),
-    hours: addLeadingZero(time.hours),
-    minutes: addLeadingZero(time.minutes),
-    seconds: addLeadingZero(time.seconds),
-  };
+  intervalId = setInterval(() => {
+    countdownInterval -= 1000;
+    const updatedTime = convertMs(countdownInterval);
+    updateTimerDisplay(updatedTime);
 
-  console.log(formattedTime); // {days: 00, hours: 00, minutes: 00, seconds: 00}
+    if (countdownInterval <= 0) {
+      clearInterval(intervalId);
+    }
+  }, 1000);
+
   // Очищення поля вводу
   input.value = '';
 });
+
+// оновлення відображення таймера
+function updateTimerDisplay(time) {
+  daysTimer.textContent = addLeadingZero(time.days);
+  hoursTimer.textContent = addLeadingZero(time.hours);
+  minutesTimer.textContent = addLeadingZero(time.minutes);
+  secondsTimer.textContent = addLeadingZero(time.seconds);
+}
 
 function convertMs(ms) {
   // Number of milliseconds per unit of time
@@ -94,9 +108,9 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 
-console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
+// console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
+// console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
+// console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
 
 function addLeadingZero(value) {
   return String(value).padStart(2, '0');
