@@ -8,6 +8,12 @@ const input = document.querySelector('#datetime-picker');
 const button = document.querySelector('button');
 button.disabled = true;
 
+// const startBtn = document.querySelector('[data-start]');
+// const daysTimer = document.querySelector('[data-days]');
+// const hoursTimer = document.querySelector('[data-hours]');
+// const minutesTimer = document.querySelector('[data-minutes]');
+// const secondsTimer = document.querySelector('[data-seconds]');
+
 // оголоси поза межами методу let змінну userSelectedDate
 let userSelectedDate = '';
 
@@ -21,16 +27,27 @@ const options = {
   onClose(selectedDates) {
     // перевірка дати на майбутність
     if (selectedDates[0] < new Date()) {
-      window.alert('Please choose a date in the future');
-      iziToast.show();
-      // iziToast.error({
-      //   title: 'Error',
+      // button.disabled = true;
+      // window.alert('Please choose a date in the future');
+
+      // iziToast.show({
       //   message: 'Please choose a date in the future',
+      //   messageColor: '#FAFAFB',
+      //   messageSize: '16px',
+      //   messageLineHeight: '1.5',
+      //   backgroundColor: '#EF4040',
       //   position: 'topRight',
       //   closeOnEscape: true,
-      //   timeout: 5000,
+      //   close: true,
       // });
-      button.disabled = true;
+
+      iziToast.error({
+        title: 'Error',
+        message: 'Please choose a date in the future',
+        position: 'topRight',
+        closeOnEscape: true,
+        timeout: 5000,
+      });
     } else {
       button.disabled = false;
       userSelectedDate = selectedDates[0];
