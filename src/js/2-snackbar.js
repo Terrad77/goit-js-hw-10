@@ -45,3 +45,6 @@ form.addEventListener('submit', function (event) {
       });
     });
 });
+
+//Style
+delayInput.style = 'appearance: textfield;';
