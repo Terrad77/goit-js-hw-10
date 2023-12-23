@@ -72,7 +72,7 @@ buttonStart.addEventListener('click', () => {
     const updatedTime = convertMs(countdownInterval);
     updateTimerDisplay(updatedTime);
 
-    if (countdownInterval <= 0) {
+    if (countdownInterval <= 1000) {
       clearInterval(intervalId);
     }
   }, 1000);
